@@ -1,0 +1,18 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Redirecting…</title>
+<p id="message">Redirecting…</p>
+<script>
+    try {
+        const state = new URLSearchParams(location.search).get("state") ?? "";
+        const payload = state.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+        const target = new URL(JSON.parse(atob(payload)).callbackUrl);
+        if (target.protocol !== "https:") throw new Error("Unsupported callback");
+        location.replace(target.origin + target.pathname + location.search);
+    } catch {
+        document.getElementById("message").textContent =
+            "This link is invalid. Start the GitHub connection again from Aemon.";
+    }
+</script>
